@@ -15,19 +15,12 @@ VALID_INTERVALS = {
 
 def render_sidebar():
 
-    st.sidebar.header("Search")
-
-    ticker = st.sidebar.text_input(
-        "Stock Symbol",
-        value="TCS.NS"
-    )
-
-    st.sidebar.divider()
+    st.sidebar.header("Chart Settings")
 
     period = st.sidebar.selectbox(
         "History",
         list(VALID_INTERVALS.keys()),
-        index=2          # 1 Month
+        index=2
     )
 
     interval = st.sidebar.selectbox(
@@ -44,4 +37,29 @@ def render_sidebar():
     macd = st.sidebar.checkbox("MACD")
     bb = st.sidebar.checkbox("Bollinger Bands")
 
-    return ticker, period, interval, ema, rsi, macd, bb
+    st.sidebar.divider()
+
+    st.sidebar.subheader("Live Updates")
+
+    live_mode = st.sidebar.toggle(
+        "Enable Live Updates",
+        value=False
+    )
+
+    refresh_interval = st.sidebar.selectbox(
+        "Refresh Every (seconds)",
+        [5, 10, 15, 30, 60],
+        index=0,
+        disabled=not live_mode
+    )
+
+    return (
+        period,
+        interval,
+        ema,
+        rsi,
+        macd,
+        bb,
+        live_mode,
+        refresh_interval
+    )

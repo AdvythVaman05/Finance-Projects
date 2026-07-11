@@ -1,0 +1,52 @@
+[
+    {
+        "symbol": "TCS.NS",
+        "company": "Tata Consultancy Services Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "TATAMOTORS.NS",
+        "company": "Tata Motors Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "TATASTEEL.NS",
+        "company": "Tata Steel Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "TATAPOWER.NS",
+        "company": "Tata Power Company Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "TATACONSUM.NS",
+        "company": "Tata Consumer Products Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "RELIANCE.NS",
+        "company": "Reliance Industries Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "INFY.NS",
+        "company": "Infosys Limited",
+        "exchange": "NSE"
+    },
+    {
+        "symbol": "AAPL",
+        "company": "Apple Inc.",
+        "exchange": "NASDAQ"
+    },
+    {
+        "symbol": "MSFT",
+        "company": "Microsoft Corporation",
+        "exchange": "NASDAQ"
+    },
+    {
+        "symbol": "NVDA",
+        "company": "NVIDIA Corporation",
+        "exchange": "NASDAQ"
+    }
+]
