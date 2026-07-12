@@ -296,4 +296,4 @@ This project is licensed under the MIT License.
 
 GitHub: https://github.com/<your_username>
 
-LinkedIn: https://linkedin.com/in/<your_linkedin>
+LinkedIn: https://linkedin.com/in/<your_linkedin>   
