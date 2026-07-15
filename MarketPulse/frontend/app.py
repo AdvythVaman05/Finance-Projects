@@ -11,7 +11,7 @@ from components.watchlist import render_watchlist
 from services.market_data import MarketDataService
 from utils.market_status import get_market_status
 
-@st.cache_data(ttl=3600)
+@st.cache_data(ttl=600)
 def get_cached_company_info(ticker):
 
     service = MarketDataService()
@@ -58,11 +58,29 @@ if ticker:
     st.success(f"Selected\n{ticker}")
 
     service = MarketDataService()
-    
+
     try:
         company_info = get_cached_company_info(ticker)
-        render_company_card(company_info)
-    except Exception:
+
+    except Exception as e:
+        company_info = None
+        print(f"Company API error for {ticker}: {e}")
+
+
+    if company_info:
+
+        try:
+            render_company_card(company_info)
+
+        except Exception as e:
+            st.warning(
+                "Company information could not be displayed."
+            )
+
+            print(f"Company card rendering error: {e}")
+
+    else:
+
         st.warning(
             "Company information is temporarily unavailable. "
             "Market data is still available."
