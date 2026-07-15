@@ -15,8 +15,15 @@ from utils.market_status import get_market_status
 def get_cached_company_info(ticker):
 
     service = MarketDataService()
+    data = service.get_company(ticker)
 
-    return service.get_company(ticker)
+    # Do not treat empty fallback data as valid company information
+    if not data or not data.get("market_cap"):
+        raise ValueError(
+            f"Company information unavailable for {ticker}"
+        )
+
+    return data
 
 st.set_page_config(
     page_title="MarketPulse",
