@@ -1,9 +1,5 @@
 streamlit
-fastapi
-uvicorn
-yfinance
 pandas
 plotly
 requests
-nselib
 streamlit-autorefresh
