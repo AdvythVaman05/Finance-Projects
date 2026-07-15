@@ -11,6 +11,13 @@ from components.watchlist import render_watchlist
 from services.market_data import MarketDataService
 from utils.market_status import get_market_status
 
+@st.cache_data(ttl=3600)
+def get_cached_company_info(ticker):
+
+    service = MarketDataService()
+
+    return service.get_company(ticker)
+
 st.set_page_config(
     page_title="MarketPulse",
     page_icon="📈",
@@ -52,9 +59,14 @@ if ticker:
 
     service = MarketDataService()
     
-    company_info = service.get_company(ticker)
-
-    render_company_card(company_info)
+    try:
+        company_info = get_cached_company_info(ticker)
+        render_company_card(company_info)
+    except Exception:
+        st.warning(
+            "Company information is temporarily unavailable. "
+            "Market data is still available."
+        )
 
     try:
 

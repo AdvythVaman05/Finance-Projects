@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 
 from services.market_service import MarketService
+
 
 router = APIRouter(
     prefix="/company",
@@ -13,18 +14,4 @@ service = MarketService()
 @router.get("")
 def get_company(ticker: str):
 
-    data = service.get_info(ticker)
-
-    if data is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Company not found."
-        )
-
-    if "error" in data:
-        raise HTTPException(
-            status_code=500,
-            detail=data["error"]
-        )
-
-    return data
+    return service.get_info(ticker)
