@@ -1,11 +1,20 @@
-import requests
 import os
+import requests
+import streamlit as st
 
-BASE_URL = os.getenv(
-    "BACKEND_URL",
-    "http://127.0.0.1:8000"
-)
 
+def get_backend_url():
+
+    if "BACKEND_URL" in st.secrets:
+        return st.secrets["BACKEND_URL"]
+
+    return os.getenv(
+        "BACKEND_URL",
+        "http://127.0.0.1:8000"
+    )
+
+
+BASE_URL = get_backend_url()
 
 class BackendAPI:
 
