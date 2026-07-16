@@ -40,6 +40,7 @@ class MarketService:
         df.reset_index(inplace=True)
 
         first_column = df.columns[0]
+
         df.rename(
             columns={
                 first_column: "Date"
@@ -54,12 +55,14 @@ class MarketService:
         )
 
     def get_info(
-    self,
-    ticker: str
-):
+        self,
+        ticker: str
+    ):
 
         try:
+
             stock = yf.Ticker(ticker)
+
             info = stock.info or {}
 
             dividend = info.get("dividendYield")
@@ -68,6 +71,7 @@ class MarketService:
                 dividend *= 100
 
             return {
+
                 "company": (
                     info.get("longName")
                     or info.get("shortName")
@@ -77,17 +81,33 @@ class MarketService:
                 "symbol": ticker,
 
                 "sector": info.get("sector"),
+
                 "industry": info.get("industry"),
+
                 "exchange": info.get("exchange"),
+
                 "currency": info.get("currency"),
+
                 "market_cap": info.get("marketCap"),
+
                 "previous_close": info.get("previousClose"),
+
                 "open": info.get("open"),
+
                 "day_high": info.get("dayHigh"),
+
                 "day_low": info.get("dayLow"),
-                "fifty_two_week_high": info.get("fiftyTwoWeekHigh"),
-                "fifty_two_week_low": info.get("fiftyTwoWeekLow"),
+
+                "fifty_two_week_high": info.get(
+                    "fiftyTwoWeekHigh"
+                ),
+
+                "fifty_two_week_low": info.get(
+                    "fiftyTwoWeekLow"
+                ),
+
                 "pe": info.get("trailingPE"),
+
                 "dividend": dividend
             }
 
@@ -98,21 +118,35 @@ class MarketService:
                 f"for {ticker}: {e}"
             )
 
-            # Return fallback data instead of crashing the API
             return {
+
                 "company": ticker,
+
                 "symbol": ticker,
+
                 "sector": None,
+
                 "industry": None,
+
                 "exchange": None,
+
                 "currency": None,
+
                 "market_cap": None,
+
                 "previous_close": None,
+
                 "open": None,
+
                 "day_high": None,
+
                 "day_low": None,
+
                 "fifty_two_week_high": None,
+
                 "fifty_two_week_low": None,
+
                 "pe": None,
+
                 "dividend": None
             }
