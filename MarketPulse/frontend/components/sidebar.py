@@ -20,7 +20,7 @@ def render_sidebar():
     period = st.sidebar.selectbox(
         "History",
         list(VALID_INTERVALS.keys()),
-        index=2
+        index=0
     )
 
     interval = st.sidebar.selectbox(
