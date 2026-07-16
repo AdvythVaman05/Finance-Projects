@@ -14,18 +14,6 @@ PERIOD_MAP = {
 }
 
 
-INTRADAY_INTERVALS = {
-    "1m",
-    "2m",
-    "5m",
-    "15m",
-    "30m",
-    "60m",
-    "90m",
-    "1h"
-}
-
-
 class MarketService:
 
     def get_history(
@@ -35,28 +23,11 @@ class MarketService:
         interval: str
     ):
 
-        requested_period = PERIOD_MAP.get(
-            period,
-            period
-        )
-
-        # For a live 1-day intraday chart, fetch several
-        # trading sessions instead of only today's session.
-        #
-        # This prevents the previous day's candles from
-        # disappearing when a new trading day begins.
-        if (
-            requested_period == "1d"
-            and interval in INTRADAY_INTERVALS
-        ):
-            download_period = "5d"
-
-        else:
-            download_period = requested_period
+        period = PERIOD_MAP.get(period, period)
 
         df = yf.download(
             tickers=ticker,
-            period=download_period,
+            period=period,
             interval=interval,
             progress=False,
             auto_adjust=False,
@@ -69,7 +40,6 @@ class MarketService:
         df.reset_index(inplace=True)
 
         first_column = df.columns[0]
-
         df.rename(
             columns={
                 first_column: "Date"
@@ -84,25 +54,20 @@ class MarketService:
         )
 
     def get_info(
-        self,
-        ticker: str
-    ):
+    self,
+    ticker: str
+):
 
         try:
-
             stock = yf.Ticker(ticker)
-
             info = stock.info or {}
 
-            dividend = info.get(
-                "dividendYield"
-            )
+            dividend = info.get("dividendYield")
 
             if dividend is not None:
                 dividend *= 100
 
             return {
-
                 "company": (
                     info.get("longName")
                     or info.get("shortName")
@@ -112,35 +77,17 @@ class MarketService:
                 "symbol": ticker,
 
                 "sector": info.get("sector"),
-
                 "industry": info.get("industry"),
-
                 "exchange": info.get("exchange"),
-
                 "currency": info.get("currency"),
-
                 "market_cap": info.get("marketCap"),
-
-                "previous_close": info.get(
-                    "previousClose"
-                ),
-
+                "previous_close": info.get("previousClose"),
                 "open": info.get("open"),
-
                 "day_high": info.get("dayHigh"),
-
                 "day_low": info.get("dayLow"),
-
-                "fifty_two_week_high": info.get(
-                    "fiftyTwoWeekHigh"
-                ),
-
-                "fifty_two_week_low": info.get(
-                    "fiftyTwoWeekLow"
-                ),
-
+                "fifty_two_week_high": info.get("fiftyTwoWeekHigh"),
+                "fifty_two_week_low": info.get("fiftyTwoWeekLow"),
                 "pe": info.get("trailingPE"),
-
                 "dividend": dividend
             }
 
@@ -151,35 +98,21 @@ class MarketService:
                 f"for {ticker}: {e}"
             )
 
+            # Return fallback data instead of crashing the API
             return {
-
                 "company": ticker,
-
                 "symbol": ticker,
-
                 "sector": None,
-
                 "industry": None,
-
                 "exchange": None,
-
                 "currency": None,
-
                 "market_cap": None,
-
                 "previous_close": None,
-
                 "open": None,
-
                 "day_high": None,
-
                 "day_low": None,
-
                 "fifty_two_week_high": None,
-
                 "fifty_two_week_low": None,
-
                 "pe": None,
-
                 "dividend": None
             }
