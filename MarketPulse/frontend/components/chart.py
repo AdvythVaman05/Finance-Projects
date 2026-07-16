@@ -15,8 +15,42 @@ def render_chart(
     ema_enabled,
     rsi_enabled,
     macd_enabled,
-    bb_enabled
+    bb_enabled,
+    interval
 ):
+
+    # ==========================
+    # MARKET HOURS CONFIGURATION
+    # ==========================
+
+    intraday_intervals = {
+        "1m",
+        "2m",
+        "5m",
+        "15m",
+        "30m",
+        "60m"
+    }
+
+    # Remove weekends and non-trading hours
+    # only for NSE intraday charts
+    rangebreaks = []
+
+    if ticker.endswith(".NS") and interval in intraday_intervals:
+
+        rangebreaks = [
+            # Remove weekends
+            dict(
+                bounds=["sat", "mon"]
+            ),
+
+            # Remove NSE non-trading hours
+            # Market closes at 15:30 and opens at 09:15
+            dict(
+                bounds=[15.5, 9.25],
+                pattern="hour"
+            )
+        ]
 
     # ==========================
     # PRICE CHART
@@ -104,7 +138,13 @@ def render_chart(
         )
     )
 
-    fig.update_yaxes(title="Price")
+    fig.update_xaxes(
+        rangebreaks=rangebreaks
+    )
+
+    fig.update_yaxes(
+        title="Price"
+    )
 
     st.plotly_chart(
         fig,
@@ -144,7 +184,13 @@ def render_chart(
         )
     )
 
-    volume_fig.update_yaxes(title="Volume")
+    volume_fig.update_xaxes(
+        rangebreaks=rangebreaks
+    )
+
+    volume_fig.update_yaxes(
+        title="Volume (Shares)"
+    )
 
     st.plotly_chart(
         volume_fig,
@@ -196,6 +242,10 @@ def render_chart(
                 t=50,
                 b=20
             )
+        )
+
+        rsi_fig.update_xaxes(
+            rangebreaks=rangebreaks
         )
 
         rsi_fig.update_yaxes(
@@ -270,7 +320,13 @@ def render_chart(
             )
         )
 
-        macd_fig.update_yaxes(title="MACD")
+        macd_fig.update_xaxes(
+            rangebreaks=rangebreaks
+        )
+
+        macd_fig.update_yaxes(
+            title="MACD"
+        )
 
         st.plotly_chart(
             macd_fig,

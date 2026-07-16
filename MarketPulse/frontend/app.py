@@ -103,7 +103,7 @@ if ticker:
                 interval=interval
             )
 
-        render_chart(df, ticker, ema, rsi, macd, bb)
+        render_chart(df, ticker, ema, rsi, macd, bb, interval)
 
         render_metrics(df)
         
