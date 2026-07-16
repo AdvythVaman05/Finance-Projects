@@ -29,13 +29,15 @@ def render_chart(
         "5m",
         "15m",
         "30m",
-        "60m"
+        "60m",
+        "90m",
+        "1h"
     }
 
-    # Remove weekends and non-trading hours
-    # only for NSE intraday charts
     rangebreaks = []
 
+    # NSE trading hours:
+    # 09:15 AM -> 03:30 PM
     if ticker.endswith(".NS") and interval in intraday_intervals:
 
         rangebreaks = [
@@ -44,13 +46,16 @@ def render_chart(
                 bounds=["sat", "mon"]
             ),
 
-            # Remove NSE non-trading hours
-            # Market closes at 15:30 and opens at 09:15
+            # Remove overnight/non-trading hours
             dict(
                 bounds=[15.5, 9.25],
                 pattern="hour"
             )
         ]
+
+    # Actual available data boundaries
+    x_min = df.index.min()
+    x_max = df.index.max()
 
     # ==========================
     # PRICE CHART
@@ -139,7 +144,10 @@ def render_chart(
     )
 
     fig.update_xaxes(
-        rangebreaks=rangebreaks
+        rangebreaks=rangebreaks,
+        range=[x_min, x_max],
+        minallowed=x_min,
+        maxallowed=x_max
     )
 
     fig.update_yaxes(
@@ -157,7 +165,10 @@ def render_chart(
 
     volume_colors = [
         "green" if c >= o else "red"
-        for o, c in zip(df["Open"], df["Close"])
+        for o, c in zip(
+            df["Open"],
+            df["Close"]
+        )
     ]
 
     volume_fig = go.Figure()
@@ -185,7 +196,10 @@ def render_chart(
     )
 
     volume_fig.update_xaxes(
-        rangebreaks=rangebreaks
+        rangebreaks=rangebreaks,
+        range=[x_min, x_max],
+        minallowed=x_min,
+        maxallowed=x_max
     )
 
     volume_fig.update_yaxes(
@@ -245,7 +259,10 @@ def render_chart(
         )
 
         rsi_fig.update_xaxes(
-            rangebreaks=rangebreaks
+            rangebreaks=rangebreaks,
+            range=[x_min, x_max],
+            minallowed=x_min,
+            maxallowed=x_max
         )
 
         rsi_fig.update_yaxes(
@@ -321,7 +338,10 @@ def render_chart(
         )
 
         macd_fig.update_xaxes(
-            rangebreaks=rangebreaks
+            rangebreaks=rangebreaks,
+            range=[x_min, x_max],
+            minallowed=x_min,
+            maxallowed=x_max
         )
 
         macd_fig.update_yaxes(
